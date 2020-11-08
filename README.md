@@ -18,7 +18,10 @@ composer require jubayed/laravel-generator
 ## Usage
 
 ``` php
-// Usage description here
+'providers' => [
+    // ...
+    Jubayed\LaravelGenerator\LaravelGeneratorServiceProvider::class,
+];
 ```
 
 ### Testing
