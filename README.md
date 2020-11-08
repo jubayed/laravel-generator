@@ -1,9 +1,9 @@
 # Very short description of the package
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/ducor/ducor-generator.svg?style=flat-square)](https://packagist.org/packages/ducor/ducor-generator)
-[![Build Status](https://img.shields.io/travis/ducor/ducor-generator/master.svg?style=flat-square)](https://travis-ci.org/ducor/ducor-generator)
-[![Quality Score](https://img.shields.io/scrutinizer/g/ducor/ducor-generator.svg?style=flat-square)](https://scrutinizer-ci.com/g/ducor/ducor-generator)
-[![Total Downloads](https://img.shields.io/packagist/dt/ducor/ducor-generator.svg?style=flat-square)](https://packagist.org/packages/ducor/ducor-generator)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/jubayed/laravel-generator.svg?style=flat-square)](https://packagist.org/packages/jubayed/laravel-generator)
+[![Build Status](https://img.shields.io/travis/jubayed/laravel-generator/master.svg?style=flat-square)](https://travis-ci.org/jubayed/laravel-generator)
+[![Quality Score](https://img.shields.io/scrutinizer/g/jubayed/laravel-generator.svg?style=flat-square)](https://scrutinizer-ci.com/g/jubayed/jubayed-generator)
+[![Total Downloads](https://img.shields.io/packagist/dt/jubayed/laravel-generator.svg?style=flat-square)](https://packagist.org/packages/jubayed/laravel-generator)
 
 This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
 
@@ -12,7 +12,7 @@ This is where your description should go. Try and limit it to a paragraph or two
 You can install the package via composer:
 
 ```bash
-composer require ducor/ducor-laravel-generator
+composer require jubayed/laravel-generator
 ```
 
 ## Usage
@@ -37,17 +37,14 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ### Security
 
-If you discover any security related issues, please email ducorteam@gmail.com instead of using the issue tracker.
+If you discover any security related issues, please email jubayedteam@gmail.com instead of using the issue tracker.
 
 ## Credits
 
-- [Ducor Team](https://github.com/ducor)
+- [jubayed Team](https://github.com/jubayed)
 - [All Contributors](../../contributors)
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
