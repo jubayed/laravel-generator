@@ -1,6 +1,6 @@
 <?php
 
-namespace Jubayed\LaravelGenerator\Commands\Scaffold;
+namespace Jubayed\LaravelGenerator\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;

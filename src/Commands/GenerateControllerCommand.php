@@ -1,6 +1,6 @@
 <?php
 
-namespace Ducor\LaravelGenerator\Commands\Scaffold;
+namespace Ducor\LaravelGenerator\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;

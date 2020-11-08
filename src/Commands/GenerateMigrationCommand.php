@@ -1,17 +1,18 @@
 <?php
 
-namespace Jubayed\LaravelGenerator\Commands\Scaffold;
+namespace Jubayed\LaravelGenerator\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 
-class GenerateMvcCommand extends Command
+class GenerateMigrationCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:mvc {name}';  
+    protected $signature = 'ducor:import-migration {table : Database TableName}';      
     
     /**
      * Create a new command instance.
@@ -31,13 +32,8 @@ class GenerateMvcCommand extends Command
      */
     public function handle()
     {
-        $this->call('ducor:make-model', [
-            'table' => $this->argument('name'),
-            '-c' => true,
-            '-r' => true,
-        ]);
-
-        $this->info('MVC Generated');
+        Artisan::call('migrate:generate '. $this->argument('table') . ' --no-interaction');
+        $this->info('migratetion file generated');
         return 0;
     }    
 }
