@@ -40,11 +40,11 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ### Security
 
-If you discover any security related issues, please email jubayedteam@gmail.com instead of using the issue tracker.
+If you discover any security related issues, please email admin@jubayed.com instead of using the issue tracker.
 
 ## Credits
 
-- [jubayed Team](https://github.com/jubayed)
+- [jubayed](https://github.com/jubayed)
 - [All Contributors](../../contributors)
 
 ## License
