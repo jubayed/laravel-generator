@@ -142,7 +142,7 @@ class GenerateControllerCommand extends Command
      */
     protected function getStub()
     {
-        $stub = __DIR__.'/../../../stubs/controller.stub';
+        $stub = __DIR__.'/../../stubs/controller.stub';
         return file_get_contents($stub) ;
     }
 

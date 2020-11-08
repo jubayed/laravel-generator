@@ -116,15 +116,15 @@ class GenerateViewCommand extends Command
         $name = strtolower($this->argument('name'));
 
         if( $name == 'index'){
-            $stub = __DIR__.'/../../../stubs/view/index.stub';
+            $stub = __DIR__.'/../../stubs/view/index.stub';
         }elseif ( $name =='create' ) {
-            $stub = __DIR__.'/../../../stubs/view/create.stub';
+            $stub = __DIR__.'/../../stubs/view/create.stub';
         }elseif ( $name == 'edit') {
-            $stub = __DIR__.'/../../../stubs/view/edit.stub';
+            $stub = __DIR__.'/../../stubs/view/edit.stub';
         }elseif ( $name == 'show') {
-            $stub = __DIR__.'/../../../stubs/view/show.stub';
+            $stub = __DIR__.'/../../stubs/view/show.stub';
         }else {
-            $stub = __DIR__.'/../../../stubs/view/blank.stub';
+            $stub = __DIR__.'/../../stubs/view/blank.stub';
         }
         return file_get_contents($stub) ;
     }
