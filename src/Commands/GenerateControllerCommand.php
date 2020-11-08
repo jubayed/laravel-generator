@@ -80,7 +80,7 @@ class GenerateControllerCommand extends Command
     public function getAbsolutePath()
     {
         $path = Config::get('laravel-generator.path.controller');
-        $path .= $this->getControllerName(). '.php';
+        $path .= ucfirst($this->getControllerName()). '.php';
         return $path;
     }
 
