@@ -1,0 +1,36 @@
+{
+    "name": "jubayed/laravel-generator",
+    "description": "",
+    "keywords": [
+        "ducor",
+        "ducor-generator"
+    ],
+    "homepage": "https://github.com/jubayed/laravel-generator",
+    "type": "library",
+    "authors": [
+        {
+            "name": "jubayed"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "reliese/laravel": "^0.0.18",
+        "kitloong/laravel-migrations-generator": "^4.4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jubayed\\LaravelGenerator\\": "src"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jubayed\\LaravelGenerator\\LaravelGeneratorServiceProvider"
+            ]
+        }
+    }
+}
+
