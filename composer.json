@@ -13,10 +13,13 @@
         }
     ],
     "require": {
-        "php": "^7.4",
+        "php": "^7.4"
+    },
+    "require-dev": {
         "reliese/laravel": "^0.0.18",
         "kitloong/laravel-migrations-generator": "^4.4.2"
     },
+    
     "autoload": {
         "psr-4": {
             "Jubayed\\LaravelGenerator\\": "src"
