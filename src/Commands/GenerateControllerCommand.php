@@ -1,15 +1,11 @@
 <?php
 
-namespace Ducor\LaravelGenerator\Commands;
+namespace Jubayed\LaravelGenerator\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\View;
-
-
 
 class GenerateControllerCommand extends Command
 {    

@@ -29,7 +29,6 @@ class LaravelGeneratorServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-
         if ($this->app->environment('local')) {
             $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravel-generator');
             $this->app->register(\Reliese\Coders\CodersServiceProvider::class);
