@@ -19,23 +19,25 @@
 
 
 @section('content')
+<form action="" method="post">
+@csrf
+    <div class="row">
 
-<div class="row">
-
-    <div class="col">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">{{ title }}</h4>
-            </div>
-            <div class="card-body">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">{{ title }}</h4>
+                </div>
+                <div class="card-body">
 {{ create_form }}
-            </div>
-            <div class="card-footer text-right">
-                <x-core::form.create />
+                </div>
+                <div class="card-footer text-right">
+                    <x-core::form.create />
+                </div>
             </div>
         </div>
     </div>
-</div>
+</form>
 @endsection
 
 

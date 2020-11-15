@@ -276,13 +276,12 @@ class GenerateViewCommand extends Command
         $model = new $model();
         $fillables = $model->getFillable();
 
-        $t = "                ";
-        $template = $t. "<form>\r\n";
+        $t = "                    ";        
         // thead
-
+        $template = '';
         // get data
         $name = $this->getModelName();
-        $name = Str::plural(strtolower($name));
+        $name = Str::singular(strtolower($name));
 
         foreach ($fillables as $key => $fillable ) {
             $template .=  $t. "  <div class='form-row'>\r\n";
@@ -300,7 +299,7 @@ class GenerateViewCommand extends Command
             $template .=  $t. "     @endif\r\n";
 
             $template .=  $t. "    </div>\r\n";
-            $template .=  $t. "  </div>\r\n\\r\n";
+            $template .=  $t. "  </div>\r\n\r\n";
         }
         $template .=  $t. "</form>\r\n";
         
@@ -320,12 +319,12 @@ class GenerateViewCommand extends Command
         $fillables = $model->getFillable();
 
         $t = "                ";
-        $template = $t. "<form>\r\n";
+        $template = "";
         // thead
 
         // get data
         $name = $this->getModelName();
-        $name = Str::plural(strtolower($name));
+        $name = Str::singular(strtolower($name));
 
         foreach ($fillables as $key => $fillable ) {
             $template .=  $t. "  <div class='form-row'>\r\n";
@@ -369,19 +368,13 @@ class GenerateViewCommand extends Command
         $template = "";
         // get data
         $name = $this->getModelName();
-        $name = Str::plural(strtolower($name));
+        $name = Str::singular(strtolower($name));
 
         foreach ($fillables as $fillable ) {
-            $template .=  $t. "<div class='form-row'>\r\n";
-            $template .=  $t. "  <div class='form-group col'>\r\n";
-
-            $template .=  $t. '    <label for="field-'.$fillable.'" class="col-sm-2 col-form-label">{!! ___( "'.$name.'.create.field.'.$fillable.'.label" ) !!}</label>'."\r\n";
-            $template .=  $t. '    <div class="col-sm-10">'. "\r\n";
-            $template .=  $t. '      <input name="'.$fillable.'" value="{{ $data->'.$fillable.' }}" id="field-'.$fillable.'" class="form-control" />'."\r\n";
-            $template .=  $t. "    </div>\r\n";
-
+            $template .=  $t. "  <div class='form-group'>\r\n";
+            $template .=  $t. '    <label>{!! ___( "'.$name.'.create.field.'.$fillable.'.label" ) !!}</label>'."\r\n";
+            $template .=  $t. '    <input value="{{ $data->'.$fillable.' }}" class="form-control" readonly>'."\r\n";
             $template .=  $t. "  </div>\r\n";
-            $template .=  $t. "</div>\r\n\r\n";
         }
         
         return $template;
