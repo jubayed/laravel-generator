@@ -47,7 +47,7 @@ class {{ controller }} extends Controller
 {{ field_data }}
         ]);
 
-        notify()->success(__( '{{ notify }}.notify.create' ), __( '{{ notify }}.notify.common.create' ) );
+        notify()->success(__( '{{ notify }}.notify.create.message' ), __( '{{ notify }}.notify.create.title' ) );
         return back();
     }
 
@@ -93,7 +93,7 @@ class {{ controller }} extends Controller
 {{ field_data }}
         ]);
         
-        notify()->success(__( '{{ notify }}.notify.edit' ), __( '{{ notify }}.notify.common.edit' ) );
+        notify()->success(__( '{{ notify }}.notify.edit.message' ), __( '{{ notify }}.notify.edit.title' ) );
 
         return back();
     }
@@ -122,7 +122,7 @@ class {{ controller }} extends Controller
             }
         }
 
-        notify()->success(__( '{{ notify }}.notify.delete' ), __( '{{ notify }}.notify.common.delete' ) );
+        notify()->success(__( '{{ notify }}.notify.delete.message' ), __( '{{ notify }}.notify.delete.title' ) );
         return back();
     }
 }
