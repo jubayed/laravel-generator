@@ -91,7 +91,7 @@ class GenerateControllerCommand extends Command
     {
         $controller = $this->getModelName();
         $controller .= 'Controller';
-        return $controller;
+        return ucfirst($controller);
         //return Config::get('laravel-generator.path.controller'). $controller. '.php';
     }
 
