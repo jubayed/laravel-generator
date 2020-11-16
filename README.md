@@ -50,7 +50,6 @@ If you discover any security related issues, please email admin@jubayed.com inst
 ## Credits
 
 - [jubayed](https://github.com/jubayed)
-- [All Contributors](../../contributors)
 
 ## License
 
