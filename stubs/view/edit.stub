@@ -30,7 +30,7 @@
     {{ edit_form }}
                 </div>
                 <div class="card-footer text-right">
-                    <x-core::form.update />
+                    <x-core::update />
                 </div>
             </div>
         </div>

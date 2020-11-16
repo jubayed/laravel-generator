@@ -32,7 +32,7 @@
 {{ create_form }}
                 </div>
                 <div class="card-footer text-right">
-                    <x-core::form.create />
+                    <x-core::create />
                 </div>
             </div>
         </div>
