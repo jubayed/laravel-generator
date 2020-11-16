@@ -24,6 +24,11 @@ composer require jubayed/laravel-generator
 ];
 ```
 
+## publish
+``` sh
+php artisan vendor:publish --provider=Jubayed\LaravelGenerator\LaravelGeneratorServiceProvider
+```
+
 ### Testing
 
 ``` bash
