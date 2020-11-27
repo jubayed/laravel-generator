@@ -183,4 +183,19 @@ return [
         'doctrine_mappings' => [],
     ],
 
+    'model' => [
+        'connection' => '',
+        'namespace' => '',
+        'table' => '',
+        'primaryKey' => 'id',
+        'folder' => '',
+        'debug' => false,
+        'all' => false,
+        'singular' => false,
+        'overwrite' => false,
+        'blacklist' => ['migrations', 'users'],
+        'whitelist' => [],
+        'delimiter' => ', '
+    ]
+
 ];

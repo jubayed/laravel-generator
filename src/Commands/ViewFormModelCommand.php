@@ -2,22 +2,29 @@
 
 namespace Jubayed\LaravelGenerator\Commands;
 
-use Illuminate\Console\Command;
+use Illuminate\Console\GeneratorCommand;
+
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\View;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
 
-class GenerateViewCommand extends Command
+
+class ViewFormModelCommand extends GeneratorCommand
 {
+
     /**
-     * The name and signature of the console command.
+     * The type of class being generated.
      *
      * @var string
      */
-    protected $signature = 'ducor:make-view
-                            { name : name of blade file in view}
-                            {--modelnamespace|model= : Enter model namespace *required}';
+    protected $type = 'Blade';
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = "ducor:viewformmodel";
 
     /**
      * The console command description.
@@ -26,53 +33,90 @@ class GenerateViewCommand extends Command
      */
     protected $description = 'Command description';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
+
+    private function chekcModel()
     {
-        parent::__construct();
+        if (!class_exists($this->option('model'))) {
+            $this->error('Model Not Found! "' . $this->option('model'). '::class"');
+            exit();
+        }
+
     }
 
-    
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
     public function handle()
     {
-        $template = $this->blankTemplate($this->getStub());
-        
-        $name =  $this->argument('name');
+        $this->chekcModel();
 
-        if (file_exists($this->getViewPath())) {
-            $timestamp = date('d_His');
-            if (!copy($this->getViewPath(), $this->getViewPath(). '_'. $timestamp. '.~')) {
-                $this->info('File copy problem');
-            }else{
-                file_put_contents($this->getViewPath(), $template);
-                $this->info($name . 'View Generated');
-            }
-        }else{
-            file_put_contents($this->getViewPath(), $template);
-            $this->info($name . ' View Generated');
+        // First we need to ensure that the given name is not a reserved word within the PHP
+        // language and that the class name will actually be valid. If it is not valid we
+        // can error now and prevent from polluting the filesystem using invalid files.
+        if ($this->isReservedName($this->getNameInput())) {
+            $this->error('The name "' . $this->getNameInput() . '" is reserved by PHP.');
+
+            return false;
         }
-        
+        $this->backup();
 
-        return 0;
+
+
+        $path = $this->getDirPath();
+
+
+        // Next, We will check to see if the class already exists. If it does, we don't want
+        // to create the class and overwrite the user's code. So, we will bail out so the
+        // code is untouched. Otherwise, we will continue generating this class' files.
+        if ((!$this->hasOption('force') ||
+            !$this->option('force')) &&
+            $this->alreadyExists($this->getNameInput())
+        ) {
+            $this->error($this->type . ' already exists!');
+
+            return false;
+        }
+
+
+        // Next, we will generate the path to the location where this class' file should get
+        // written. Then, we will build the class and make the proper replacements on the
+        // stub files so that it gets the correctly formatted namespace and class name.
+        $this->makeDirectory($path);
+        $template = $this->blankTemplate($this->getStub());
+
+        $this->files->put($this->getFullPath(), $template);
+
+        $this->info($this->type . ' created successfully.');
+    }
+    /**
+     * Determine if the class already exists.
+     *
+     * @param  string  $path
+     * @return bool
+     */
+    protected function alreadyExists($path)
+    {
+        return $this->files->exists($path);
+    }
+   
+    protected function backup()
+    {
+        $name = $this->argument('name');
+
+        if ( $this->option('backup') && file_exists($this->getFullPath())) {
+            $timestamp = date('d_His');
+            if (!copy($this->getFullPath(), $this->getFullPath() . '_' . $timestamp . '.~')) {
+                $this->info('Backup Fails');
+            } else {
+                $this->info("$name.blade.php backup complete");
+            }
+        } 
     }
 
-    
     /**
      * Build the class with the given name.
      *
      * @param  string  $name
      * @return string
      */
-    private function blankTemplate($subject)
+    protected function blankTemplate($subject)
     {
         return $this->stub([
             '{{ layout }}' => Config::get('laravel-generator.template.layout'),
@@ -98,7 +142,7 @@ class GenerateViewCommand extends Command
      * @param  string  $name
      * @return string
      */
-    private function stub($target = [], $subject)
+    protected function stub($target = [], $subject)
     {
         foreach ($target as $key => $value) {
             $subject = str_replace(  $key,  $value,  $subject );
@@ -111,7 +155,7 @@ class GenerateViewCommand extends Command
      *
      * @return string
      */
-    private function getStub()
+    protected function getStub()
     {
         $name = strtolower($this->argument('name'));
 
@@ -129,14 +173,14 @@ class GenerateViewCommand extends Command
         return file_get_contents($stub) ;
     }
 
-    private function getModelName()
+    protected function getModelName()
     {
         $model = $this->getModelNameSpace();
         $model = \explode("\\", $model);
         return end($model);
     }
 
-    private function getModelNameSpace()
+    protected function getModelNameSpace()
     {
         $model = $this->option('model');
 
@@ -149,25 +193,24 @@ class GenerateViewCommand extends Command
 
     }
 
-    private function getViewPath()
+    protected function getDirPath()
     {
         $name = Config::get('laravel-generator.view.path');
 
         $name .= $this->getModelName();
         $name = Str::plural(strtolower($name));
 
-        if(is_dir(resource_path( 'views/'. $name ))){
-            //$this->error("View path already exist");
-            //die();
-        }else{
-            File::makeDirectory( resource_path('views/'. $name ));
-        }
-
-        $path =  $name. '/'. strtolower( $this->argument('name') ) . '.blade.php';
-
-        return resource_path('views/'. $path);
+        return resource_path('views/'. $name);
     }
 
+
+    protected function getFullPath()
+    {
+        $path = $this->getDirPath();
+        $path .= '/' . strtolower($this->argument('name')) . '.blade.php';
+
+        return $path;
+    }
 
 
     private function getAttr($key)
@@ -207,10 +250,6 @@ class GenerateViewCommand extends Command
 
     private function indexTemplate()
     {
-
-        if(!class_exists($this->option('model'))){
-            return dd("model Not found");
-        }
         // model
         $model = $this->option('model');
         $model = new $model();
@@ -267,16 +306,12 @@ class GenerateViewCommand extends Command
     private function createTemplate()
     {
         
-        
-        if(!class_exists($this->option('model'))){
-            return dd("model Not found");
-        }
         // model
         $model = $this->option('model');
         $model = new $model();
         $fillables = $model->getFillable();
 
-        $t = "                    ";        
+        $tab = "                  ";        
         // thead
         $template = '';
         // get data
@@ -284,41 +319,28 @@ class GenerateViewCommand extends Command
         $name = Str::singular(strtolower($name));
 
         foreach ($fillables as $key => $fillable ) {
-            $template .=  $t. "  <div class='form-row'>\r\n";
-            $template .=  $t. "    <div class='form-group col'>\r\n";
-
-            if($key == 0){
-                $template .=  $t. "     @csrf\r\n";
+            if ($key == 0) {
+                $template .=  $tab . "     @csrf\r\n";
             }
-            $template .=  $t. '     <label for="field-'.$fillable.'">{!! ___( "'.$name.'.create.field.'.$fillable.'.label" ) !!}</label>'."\r\n";
-            $template .=  $t. '     <input name="'.$fillable.'" value="{{ old( "'.$fillable.'" ) }}" id="field-'.$fillable.'" class="form-control @if($errors->has("'.$fillable.'"))  is-invalid @endif"  aria-describedby="field-help-'.$fillable.'" />'."\r\n";
-            $template .=  $t. "     @if($"."errors->has('".$fillable."'))\r\n";
-            $template .=  $t. '     <small id="field-help-'.$fillable.'" class="invalid-feedback">{!! ___( $errors->first("'.$fillable.'") ) !!}</small>'. "\r\n";
-            $template .=  $t. "     @else\r\n";
-            $template .=  $t. '     <small id="field-help-'.$fillable.'" class="form-text text-muted">{!! ___( "'.$name.'.create.field.'.$fillable.'.hint" ) !!}</small>'. "\r\n";
-            $template .=  $t. "     @endif\r\n";
-
-            $template .=  $t. "    </div>\r\n";
-            $template .=  $t. "  </div>\r\n\r\n";
+            $template .=  $tab. '  <x-core::fields.text name="'. $fillable .'" value="">'."\r\n";
+            $template .=  $tab .'     {!! ___( "' . $name . '.create.field.' . $fillable . '.label" ) !!}'."\r\n";
+            $template .=  $tab. '     <x-slot name="help">'."\r\n";
+            $template .=  $tab. '     {!! ___( "'.$name.'.create.field.'.$fillable.'.hint" ) !!}'. "\r\n";
+            $template .=  $tab. '     </x-slot>'. "\r\n";
+            $template .=  $tab. "  </x-core::fields.text>\r\n";
         }
-        $template .=  $t. "</form>\r\n";
-        
-
         return $template;
     }
 
     private function editTemplate()
     {
-        
-        if(!class_exists($this->option('model'))){
-            return dd("model Not found");
-        }
+
         // model
         $model = $this->option('model');
         $model = new $model();
         $fillables = $model->getFillable();
 
-        $t = "                ";
+        $tab = "                ";
         $template = "";
         // thead
 
@@ -326,26 +348,17 @@ class GenerateViewCommand extends Command
         $name = $this->getModelName();
         $name = Str::singular(strtolower($name));
 
-        foreach ($fillables as $key => $fillable ) {
-            $template .=  $t. "  <div class='form-row'>\r\n";
-            $template .=  $t. "    <div class='form-group col'>\r\n";
-
-            if($key == 0){
-                $template .=  $t. "     @csrf\r\n";
+        foreach ($fillables as $key => $fillable) {
+            if ($key == 0) {
+                $template .=  $tab . "     @csrf\r\n";
             }
-            $template .=  $t. '     <label for="field-'.$fillable.'">{!! ___( "'.$name.'.create.field.'.$fillable.'.label" ) !!}</label>'."\r\n";
-            $template .=  $t. '     <input name="'.$fillable.'" value="{{ old( "'.$fillable.'", $data->'.$fillable.') }}" id="field-'.$fillable.'" class="form-control @if($errors->has("'.$fillable.'"))  is-invalid @endif"  aria-describedby="field-help-'.$fillable.'" />'."\r\n";
-            $template .=  $t. "     @if($"."errors->has('".$fillable."'))\r\n";
-            $template .=  $t. '     <small id="field-help-'.$fillable.'" class="invalid-feedback">{!! ___( $errors->first("'.$fillable.'") ) !!}</small>'. "\r\n";
-            $template .=  $t. "     @else\r\n";
-            $template .=  $t. '     <small id="field-help-'.$fillable.'" class="form-text text-muted">{!! ___( "'.$name.'.create.field.'.$fillable.'.hint" ) !!}</small>'. "\r\n";
-            $template .=  $t. "     @endif\r\n";
-
-            $template .=  $t. "    </div>\r\n";
-            $template .=  $t. "  </div>\r\n\r\n";
+            $template .=  $tab . '  <x-core::fields.text name="' . $fillable . '" value="{{ $data->'.$fillable.' }}">' . "\r\n";
+            $template .=  $tab . '     {!! ___( "' . $name . '.create.field.' . $fillable . '.label" ) !!}' . "\r\n";
+            $template .=  $tab . '     <x-slot name="help">' . "\r\n";
+            $template .=  $tab . '     {!! ___( "' . $name . '.create.field.' . $fillable . '.hint" ) !!}' . "\r\n";
+            $template .=  $tab . '     </x-slot>' . "\r\n";
+            $template .=  $tab . "  </x-core::fields.text>\r\n";
         }
-        $template .=  $t. "</form>\r\n";
-        
 
         return $template;
 
@@ -354,30 +367,52 @@ class GenerateViewCommand extends Command
 
     private function showTemplate()
     {
-        
-        
-        if(!class_exists($this->option('model'))){
-            return dd("model Not found");
-        }
         // model
         $model = $this->option('model');
         $model = new $model();
         $fillables = $model->getFillable();
 
-        $t = "                ";
+        $tab = "                ";
         $template = "";
         // get data
         $name = $this->getModelName();
         $name = Str::singular(strtolower($name));
 
-        foreach ($fillables as $fillable ) {
-            $template .=  $t. "  <div class='form-group'>\r\n";
-            $template .=  $t. '    <label>{!! ___( "'.$name.'.create.field.'.$fillable.'.label" ) !!}</label>'."\r\n";
-            $template .=  $t. '    <input value="{{ $data->'.$fillable.' }}" class="form-control" readonly>'."\r\n";
-            $template .=  $t. "  </div>\r\n";
+        foreach ($fillables as $key => $fillable) {
+            $template .=  $tab . '<x-core::fields.text name="' . $fillable . '" value="{{ $data->' . $fillable . ' }}" readonly>' . "\r\n";
+            $template .=  $tab . '   {!! ___( "' . $name . '.create.field.' . $fillable . '.label" ) !!}' . "\r\n";
+            $template .=  $tab . "</x-core::fields.text>\r\n";
         }
-        
         return $template;
     }
+
+
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            ['model', null, InputOption::VALUE_REQUIRED, 'Enter model namespace'],
+            ['force', 'f', InputOption::VALUE_NONE, 'overwrite view(s) if exists'],
+            ['backup', 'b', InputOption::VALUE_NONE, 'backup view(s) if exists'],
+        ];
+    }
+
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            ['name', InputArgument::REQUIRED, 'The name of the blade file'],
+        ];
+    }
+
 
 }

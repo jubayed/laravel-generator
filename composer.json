@@ -9,13 +9,13 @@
     "type": "library",
     "authors": [
         {
-            "name": "jubayed"
+            "name": "Jubayed Hossain"
         }
     ],
     "require": {
-        "php": "^7.4",
-        "reliese/laravel": "^0.0.18",
-        "kitloong/laravel-migrations-generator": "^4.4.2"
+        "illuminate/database": "^8.0",
+        "illuminate/support": "^8.0",
+        "doctrine/dbal": "^3.0"
     },
     "require-dev": {
 
