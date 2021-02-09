@@ -14,12 +14,12 @@ class LaravelGeneratorServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole() && $this->app->environment('local') ) {
             // Registering package commands.
             $this->commands([
-                \Jubayed\LaravelGenerator\Commands\ViewFormModelCommand::class,
-                \Jubayed\LaravelGenerator\Commands\ModelFromMysqlCommand::class,
-                \Jubayed\LaravelGenerator\Commands\ControllerFromModelCommand::class,
+                //\Jubayed\LaravelGenerator\Commands\ViewFormModelCommand::class,
+                // \Jubayed\LaravelGenerator\Commands\ModelFromMysqlCommand::class,
+                // \Jubayed\LaravelGenerator\Commands\ControllerFromModelCommand::class,
                 // mvc
-                \Jubayed\LaravelGenerator\Commands\MvcFromModelCommand::class,
-                \Jubayed\LaravelGenerator\Commands\MvcFromTableCommand::class,
+                // \Jubayed\LaravelGenerator\Commands\MvcFromModelCommand::class,
+                // \Jubayed\LaravelGenerator\Commands\MvcFromTableCommand::class,
                 
             ]);
         }
